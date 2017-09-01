@@ -5,19 +5,21 @@
   "main": "index.js",
   "dependencies": {
     "node-rsa": "^0.4.2",
-    "ursa": "^0.9.4",
     "react": "^15.6.1",
-    "react-dom": "^15.6.1"
+    "react-dom": "^15.6.1",
+    "ursa": "^0.9.4"
   },
   "devDependencies": {
-    "eslint": "^4.5.0",
-    "eslint-config-airbnb": "^15.1.0",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-jsx-a11y": "^6.0.2",
-    "eslint-plugin-react": "^7.3.0",
+    "babel": "^6.23.0",
     "babel-core": "^6.24.1",
+    "babel-loader": "^7.1.2",
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "eslint": "3.19.0",
+    "eslint-config-airbnb": "15.0.1",
+    "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-jsx-a11y": "5.0.1",
+    "eslint-plugin-react": "7.0.1",
     "webpack": "^3.0.0"
   },
   "scripts": {
