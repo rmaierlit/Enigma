@@ -8,6 +8,7 @@
     "node-rsa": "^0.4.2",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-toolbox": "^2.0.0-beta.12",
     "ursa": "^0.9.4"
   },
   "devDependencies": {
@@ -24,6 +25,9 @@
     "webpack": "^3.0.0"
   },
   "scripts": {
+    "start": "node server/index.js",
+    "build": "webpack",
+    "dev": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
