@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "node-rsa": "^0.4.2"
+    "node-rsa": "^0.4.2",
+    "ursa": "^0.9.4"
   },
   "devDependencies": {
     "eslint": "^4.5.0",
