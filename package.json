@@ -7,6 +7,7 @@
     "express": "^4.15.4",
     "node-rsa": "^0.4.2",
     "react": "^15.6.1",
+    "react-addons-css-transition-group": "^15.6.0",
     "react-dom": "^15.6.1",
     "react-toolbox": "^2.0.0-beta.12",
     "ursa": "^0.9.4"
@@ -17,11 +18,19 @@
     "babel-loader": "^7.1.2",
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.7",
     "eslint": "3.19.0",
     "eslint-config-airbnb": "15.0.1",
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-jsx-a11y": "5.0.1",
     "eslint-plugin-react": "7.0.1",
+    "node-sass": "^4.5.3",
+    "postcss-cssnext": "^2.9.0",
+    "postcss-each": "^0.9.3",
+    "postcss-import": "^9.1.0",
+    "postcss-loader": "^1.2.2",
+    "postcss-mixins": "^5.4.1",
+    "style-loader": "^0.18.2",
     "webpack": "^3.0.0"
   },
   "scripts": {

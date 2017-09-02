@@ -4,7 +4,6 @@ const path = require('path');
 
 const app = express();
 const client = path.join(__dirname, '../client');
-console.log(client);
 
 // app.use('/api', router);
 app.use(express.static(client));
