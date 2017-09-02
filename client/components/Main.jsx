@@ -4,6 +4,7 @@ import { Card, CardTitle, CardActions } from 'material-ui/Card';
 import Button from 'material-ui/FlatButton';
 import Input from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
+import Avatar from 'material-ui/Avatar';
 import CryptoJS from 'crypto-js';
 
 function encrypt(text, password) {
@@ -14,7 +15,7 @@ function encrypt(text, password) {
 class Main extends Component {
   constructor(props) {
     super(props);
-    this.state = { message: '', expDate: null };
+    this.state = { name: '', message: '', expDate: null };
     this.handleChange = this.handleChange.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleEncrypt = this.handleEncrypt.bind(this);
@@ -39,22 +40,29 @@ class Main extends Component {
         <CardTitle
           title="Robert's Enigma"
         />
+        <Avatar style={{ marginRight: '10px' }}>
+          {this.state.name.length > 0 ? this.state.name.charAt(0) : '/'}
+        </Avatar>
         <Input
           type="text"
-          floatingLabelFixed
-          floatingLabelText="Message"
-          hintText="(required)"
+          floatingLabelText="Name (required)"
+          name="name"
+          value={this.state.name}
+          onChange={this.handleChange}
+        />
+        <Input
+          type="text"
+          floatingLabelText="Message (required)"
           name="message"
           multiLine
           maxLength={120}
+          rowsMax={5}
           value={this.state.message}
           onChange={this.handleChange}
         />
 
         <DatePicker
-          floatingLabelFixed
-          floatingLabelText="Expiration Date"
-          hintText="(required)"
+          floatingLabelText="Expiration Date (required)"
           id="expDate"
           onChange={this.handleDateChange}
           value={this.state.expDate}
