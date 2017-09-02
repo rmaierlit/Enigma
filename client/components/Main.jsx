@@ -28,7 +28,7 @@ const Main = props => (
     />
 
     <CardActions>
-      <Button label="Encrypt" />
+      <Button label="Encrypt" onClick={props.handleEncrypt} />
       <Button label="Decrypt" />
     </CardActions>
 

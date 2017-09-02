@@ -4,6 +4,7 @@
   "description": "Encoding, decoding—-this app has everything!",
   "main": "index.js",
   "dependencies": {
+    "crypto-js": "^3.1.9-1",
     "express": "^4.15.4",
     "node-rsa": "^0.4.2",
     "react": "^15.6.1",
