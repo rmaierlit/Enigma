@@ -13,6 +13,11 @@ function encrypt(text, password) {
   return ciphertext.toString();
 }
 
+function decrypt(ciphertext, password) {
+  const bytes = CryptoJS.AES.decrypt(ciphertext.toString(), password);
+  return bytes.toString(CryptoJS.enc.Utf8);
+}
+
 class Main extends Component {
   constructor(props) {
     super(props);
@@ -22,6 +27,7 @@ class Main extends Component {
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleEncrypt = this.handleEncrypt.bind(this);
+    this.handleDecrypt = this.handleDecrypt.bind(this);
   }
 
   handleChange(event, value) {
@@ -44,6 +50,11 @@ class Main extends Component {
   handleEncrypt() {
     this.setState({ crypted: encrypt(this.state.message, 'lolwut') });
     this.handleOpen();
+  }
+
+  handleDecrypt() {
+    this.setState({ message: decrypt(this.state.crypted, 'lolwut') });
+    this.handleClose();
   }
 
   render() {
@@ -89,7 +100,9 @@ class Main extends Component {
         <CryptoDialog
           open={this.state.dialogOpen}
           crypted={this.state.crypted}
+          handleChange={this.handleChange}
           handleClose={this.handleClose}
+          handleDecrypt={this.handleDecrypt}
         />
 
       </Card>

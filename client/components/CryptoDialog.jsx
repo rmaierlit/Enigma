@@ -13,10 +13,9 @@ function CryptoDialog(props) {
     <Button
       label="Decrypt"
       primary
-      onClick={props.handleClose}
+      onClick={props.handleDecrypt}
     />,
   ];
-  console.log(props.crypted);
 
   return (
     <Dialog
@@ -27,9 +26,11 @@ function CryptoDialog(props) {
     >
       <Input 
         type="text"
+        name="crypted"
         floatingLabelText="Message"
         multiLine
         value={props.crypted}
+        onChange={props.handleChange}
       />
     </Dialog>
   );
