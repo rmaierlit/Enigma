@@ -11,9 +11,11 @@ injectTapEventPlugin();
 
 function App() {
   return (
-    <MuiThemeProvider>
-      <Main />
-    </MuiThemeProvider>
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <MuiThemeProvider>
+        <Main />
+      </MuiThemeProvider>
+    </div>
   );
 }
 
