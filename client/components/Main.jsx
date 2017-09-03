@@ -10,13 +10,13 @@ import CryptoDialog from './CryptoDialog';
 
 function encrypt(text, password) {
   const ciphertext = CryptoJS.AES.encrypt(text, password);
-  return ciphertext;
+  return ciphertext.toString();
 }
 
 class Main extends Component {
   constructor(props) {
     super(props);
-    this.state = { name: '', message: '', expDate: null, dialogOpen: false };
+    this.state = { name: '', message: '', crypted: '', expDate: null, dialogOpen: false };
     this.handleChange = this.handleChange.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
@@ -42,7 +42,8 @@ class Main extends Component {
   }
 
   handleEncrypt() {
-    alert(encrypt(this.state.message, 'lolwut'));
+    this.setState({ crypted: encrypt(this.state.message, 'lolwut') });
+    this.handleOpen();
   }
 
   render() {
@@ -65,6 +66,7 @@ class Main extends Component {
           type="text"
           floatingLabelText="Message (required)"
           name="message"
+          fullWidth
           multiLine
           maxLength={120}
           rowsMax={5}
@@ -74,7 +76,7 @@ class Main extends Component {
 
         <DatePicker
           floatingLabelText="Expiration Date (required)"
-          id="expDate"
+          fullWidth
           onChange={this.handleDateChange}
           value={this.state.expDate}
         />
@@ -86,6 +88,7 @@ class Main extends Component {
 
         <CryptoDialog
           open={this.state.dialogOpen}
+          crypted={this.state.crypted}
           handleClose={this.handleClose}
         />
 

@@ -16,6 +16,7 @@ function CryptoDialog(props) {
       onClick={props.handleClose}
     />,
   ];
+  console.log(props.crypted);
 
   return (
     <Dialog
@@ -24,7 +25,12 @@ function CryptoDialog(props) {
       open={props.open}
       onRequestClose={props.handleClose}
     >
-      <Input type="text" floatingLabelText="Message" />
+      <Input 
+        type="text"
+        floatingLabelText="Message"
+        multiLine
+        value={props.crypted}
+      />
     </Dialog>
   );
 }
