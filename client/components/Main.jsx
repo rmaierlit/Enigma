@@ -6,6 +6,7 @@ import Input from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import Avatar from 'material-ui/Avatar';
 import CryptoJS from 'crypto-js';
+import CryptoDialog from './CryptoDialog';
 
 function encrypt(text, password) {
   const ciphertext = CryptoJS.AES.encrypt(text, password);
@@ -15,9 +16,11 @@ function encrypt(text, password) {
 class Main extends Component {
   constructor(props) {
     super(props);
-    this.state = { name: '', message: '', expDate: null };
+    this.state = { name: '', message: '', expDate: null, dialogOpen: false };
     this.handleChange = this.handleChange.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
     this.handleEncrypt = this.handleEncrypt.bind(this);
   }
 
@@ -26,8 +29,16 @@ class Main extends Component {
     this.setState({ [name]: value });
   }
 
-  handleDateChange(ignore, value) {
+  handleDateChange(alwaysNull, value) {
     this.setState({ expDate: value });
+  }
+
+  handleOpen() {
+    this.setState({ dialogOpen: true });
+  }
+
+  handleClose() {
+    this.setState({ dialogOpen: false });
   }
 
   handleEncrypt() {
@@ -70,8 +81,13 @@ class Main extends Component {
 
         <CardActions>
           <Button label="Encrypt" onClick={this.handleEncrypt} />
-          <Button label="Decrypt" />
+          <Button label="Decrypt" onClick={this.handleOpen} />
         </CardActions>
+
+        <CryptoDialog
+          open={this.state.dialogOpen}
+          handleClose={this.handleClose}
+        />
 
       </Card>
     );
