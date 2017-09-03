@@ -1,8 +1,9 @@
 /* eslint-env browser */
 import React from 'react';
 import { render } from 'react-dom';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import { HashRouter, Route } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import Main from './components/Main';
 
 // Needed for onTouchTap
@@ -11,11 +12,13 @@ injectTapEventPlugin();
 
 function App() {
   return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <MuiThemeProvider>
-        <Main />
-      </MuiThemeProvider>
-    </div>
+    <MuiThemeProvider>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <HashRouter>
+          <Route path="/:hash" component={Main} />
+        </HashRouter>
+      </div>
+    </MuiThemeProvider>
   );
 }
 
