@@ -6,8 +6,11 @@ import Input from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import Avatar from 'material-ui/Avatar';
 import CryptoJS from 'crypto-js';
+import axios from 'axios';
 import CryptoDialog from './CryptoDialog';
 
+
+// client side encryption (first-layer)
 function encrypt(text, password) {
   const ciphertext = CryptoJS.AES.encrypt(text, password);
   return ciphertext.toString();
@@ -35,6 +38,7 @@ class CardView extends Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleEncrypt = this.handleEncrypt.bind(this);
     this.handleDecrypt = this.handleDecrypt.bind(this);
+    this.updateFields = this.updateFields.bind(this);
   }
 
   handleChange(event, value) {
@@ -57,18 +61,36 @@ class CardView extends Component {
   handleEncrypt() {
     if (this.state.changedSinceLastEncrypt) {
       // don't reencrypt the same message unless something has changed
-      this.setState({
-        crypted: encrypt(this.state.message, this.props.passphrase),
-        changedSinceLastEncrypt: false,
-      });
+      // changedSinceLastEncrypt: false,
+
+      const encrypted = encrypt(this.state.message, this.props.passphrase)
+      const { name, expDate } = this.state;
+      const tablet = { encrypted, name, expDate };
+
+      axios.post('/api/encryptTablet', { tablet })
+        // store the encrypted tablet in the state, reset the tracker for changes
+        .then(res => this.setState({ crypted: res.data, changedSinceLastEncrypt: false}))
+        .then(this.handleOpen())
+        .catch(err => console.error(err));
     }
-    
-    this.handleOpen();
   }
 
   handleDecrypt() {
-    this.setState({ message: decrypt(this.state.crypted, this.props.passphrase) });
+    axios.post('/api/decryptTablet', { encryptedTablet: this.state.crypted })
+      .then(res => this.updateFields(res.data))
+      .catch(err => console.error(err));
     this.handleClose();
+  }
+
+  updateFields(data) {
+    const tablet = data;
+    const { name, expDate, encrypted } = tablet;
+
+    this.setState({
+      name,
+      message: decrypt(encrypted, this.props.passphrase),
+      expDate: new Date(expDate),
+    });
   }
 
   render() {
