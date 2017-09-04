@@ -47,7 +47,7 @@ class CardView extends Component {
   }
 
   handleDateChange(alwaysNull, value) {
-    this.setState({ expDate: value });
+    this.setState({ expDate: value, changedSinceLastEncrypt: true });
   }
 
   handleOpen() {
@@ -72,6 +72,8 @@ class CardView extends Component {
         .then(res => this.setState({ crypted: res.data, changedSinceLastEncrypt: false}))
         .then(this.handleOpen())
         .catch(err => console.error(err));
+    } else {
+      this.handleOpen();
     }
   }
 

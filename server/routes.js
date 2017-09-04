@@ -10,7 +10,16 @@ routes.post('/encryptTablet', (req, res) => {
 
 routes.post('/decryptTablet', (req, res) => {
   const tablet = JSON.parse(decrypt(req.body.encryptedTablet, secret));
-  res.send(tablet);
+  
+  // do not return tablet if current time is past expiration date
+  const now = new Date();
+  const exp = new Date(tablet.expDate);
+  if (exp < now) {
+    res.status(403);
+    res.send('Message has expired');
+  } else {
+    res.send(tablet);
+  }
 });
 
 module.exports = routes;
