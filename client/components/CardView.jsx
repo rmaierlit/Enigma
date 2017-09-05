@@ -30,9 +30,14 @@ class CardView extends Component {
       crypted: '',
       expDate: null,
       dialogOpen: false,
+      dialogMessage: '',
       changedSinceLastEncrypt: false,
+      nameError: null,
+      messageError: null,
+      expError: null,
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleUntrackedChange = this.handleUntrackedChange.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -46,12 +51,17 @@ class CardView extends Component {
     this.setState({ [name]: value, changedSinceLastEncrypt: true });
   }
 
+  handleUntrackedChange(event, value) {
+    const { name } = event.target;
+    this.setState({ [name]: value });
+  }
+
   handleDateChange(alwaysNull, value) {
     this.setState({ expDate: value, changedSinceLastEncrypt: true });
   }
 
   handleOpen() {
-    this.setState({ dialogOpen: true });
+    this.setState({ dialogOpen: true, dialogMessage: this.state.crypted });
   }
 
   handleClose() {
@@ -59,7 +69,8 @@ class CardView extends Component {
   }
 
   handleEncrypt() {
-    if (this.state.changedSinceLastEncrypt) {
+    const inputIsValid = this.validateInput();
+    if (this.state.changedSinceLastEncrypt && inputIsValid) {
       // don't reencrypt the same message unless something has changed
       // changedSinceLastEncrypt: false,
 
@@ -69,16 +80,51 @@ class CardView extends Component {
 
       axios.post('/api/encryptTablet', { tablet })
         // store the encrypted tablet in the state, reset the tracker for changes
-        .then(res => this.setState({ crypted: res.data, changedSinceLastEncrypt: false}))
-        .then(this.handleOpen())
+        .then(res => this.setState({ crypted: res.data, changedSinceLastEncrypt: false }, 
+          this.handleOpen)) // callback to open dialog after setState is finished updating
         .catch(err => console.error(err));
-    } else {
+    } else if (inputIsValid) {
       this.handleOpen();
     }
   }
 
+  validateInput() {
+    const inputErrors = [this.validName(), this.validMessage(), this.validExpiration()];
+    if (inputErrors.includes(false)) {
+      return false;
+    }
+    return true;
+  }
+
+  validName() {
+    if (this.state.name === '') {
+      this.setState({nameError: 'name is required'});
+      return false;
+    }
+    this.setState({nameError: ''});
+    return true;
+  }
+
+  validMessage() {
+    if (this.state.message === '') {
+      this.setState({messageError: 'message is required'});
+      return false;
+    }
+    this.setState({messageError: ''});
+    return true;
+  }
+
+  validExpiration() {
+    if (this.state.expDate === null) {
+      this.setState({ expError: 'expiration date is required' });
+      return false;
+    }
+    this.setState({expError: ''});
+    return true;
+  }
+
   handleDecrypt() {
-    axios.post('/api/decryptTablet', { encryptedTablet: this.state.crypted })
+    axios.post('/api/decryptTablet', { encryptedTablet: this.state.dialogMessage })
       .then(res => this.updateFields(res.data))
       .catch(err => console.error(err));
     this.handleClose();
@@ -92,6 +138,7 @@ class CardView extends Component {
       name,
       message: decrypt(encrypted, this.props.passphrase),
       expDate: new Date(expDate),
+      changedSinceLastEncrypt: true,
     });
   }
 
@@ -110,6 +157,7 @@ class CardView extends Component {
           name="name"
           value={this.state.name}
           onChange={this.handleChange}
+          errorText={this.state.nameError}
         />
         <Input
           type="text"
@@ -121,6 +169,7 @@ class CardView extends Component {
           rowsMax={5}
           value={this.state.message}
           onChange={this.handleChange}
+          errorText={this.state.messageError}
         />
 
         <DatePicker
@@ -128,6 +177,7 @@ class CardView extends Component {
           fullWidth
           onChange={this.handleDateChange}
           value={this.state.expDate}
+          errorText={this.state.expError}
         />
 
         <CardActions>
@@ -137,8 +187,8 @@ class CardView extends Component {
 
         <CryptoDialog
           open={this.state.dialogOpen}
-          crypted={this.state.crypted}
-          handleChange={this.handleChange}
+          dialogMessage={this.state.dialogMessage}
+          handleChange={this.handleUntrackedChange}
           handleClose={this.handleClose}
           handleDecrypt={this.handleDecrypt}
         />
