@@ -13,11 +13,12 @@ function ServerDialog(props) {
 
   return (
     <Dialog
+      title="Error"
       actions={actions}
       open={props.open}
       onRequestClose={props.handleClose}
     >
-      <h2 style={{ color: 'rgb(244, 67, 54)' }}>{props.message}</h2>
+      {props.message}
     </Dialog>
   );
 }

@@ -14,7 +14,7 @@ routes.post('/decryptTablet', (req, res) => {
   try {
     tablet = JSON.parse(decrypt(req.body.encryptedTablet, secret));
   } catch (e) {
-    res.send({ message: 'Error: Message could not be decrypted' });
+    res.send({ message: 'Message could not be decrypted' });
     return;
   }
 
@@ -22,7 +22,7 @@ routes.post('/decryptTablet', (req, res) => {
   const now = new Date();
   const exp = new Date(tablet.expDate);
   if (exp < now) {
-    res.send({ message: 'Error: Message has expired' });
+    res.send({ message: 'Message has expired' });
   } else {
     res.send({ tablet });
   }

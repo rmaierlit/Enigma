@@ -18,7 +18,7 @@ function encrypt(text, password) {
 }
 
 function decrypt(ciphertext, password) {
-  const bytes = CryptoJS.AES.decrypt(ciphertext.toString(), password);
+  const bytes = CryptoJS.AES.decrypt(ciphertext, password);
   return bytes.toString(CryptoJS.enc.Utf8);
 }
 
@@ -152,13 +152,21 @@ class CardView extends Component {
     this.handleClose();
   }
 
-  updateFields(data) {
-    const tablet = data;
+  updateFields(tablet) {
     const { name, expDate, encrypted } = tablet;
+    const message = decrypt(encrypted, this.props.passphrase);
+
+    if (message.length === 0) {
+      // messages cannot be length zero, so this indicates
+      // the user is trying to decrypt this message
+      // with an invalid passphrase
+      this.displayServerMessage('Message cannot be decrypted with this passphrase');
+      return;
+    }
 
     this.setState({
       name,
-      message: decrypt(encrypted, this.props.passphrase),
+      message,
       expDate: new Date(expDate),
       changedSinceLastEncrypt: true,
     });
