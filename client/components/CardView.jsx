@@ -168,6 +168,9 @@ class CardView extends Component {
       name,
       message,
       expDate: new Date(expDate),
+      nameError: null,
+      messageError: null,
+      expError: null,
       changedSinceLastEncrypt: true,
     });
   }
