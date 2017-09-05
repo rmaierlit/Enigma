@@ -1,11 +1,13 @@
 # Enigma
 
-### Installing Enigma:
+### Starting Enigma
 If you wish, you can change the server secret by editing _server/helpers/secret.js_
 
-....npm install
-....npm start
-
+Then run these commands:
+````
+npm install
+npm start
+````
 
 ### How Enigma Works
 
@@ -30,7 +32,7 @@ The server encrypts this entire JSON object using a secret passphrase (stored in
 }
 ```
 
-Because the message is encrypted both on the client and the server, neither the user nor the Enigma administrators will all the information necessary for decryption. Both sides will have to work together. This approach has several advantages:
+Because the message is encrypted both on the client and the server, neither the user nor the Enigma administrators will have all the information necessary for decryption. Both sides will have to work together. This approach has several advantages:
 
 * Users do not need to "trust" Enigma to keep secret the contents of their messages, as the message field itself is already encrypted when sent to the server, and the server never sees the client-side passphrase.
 
