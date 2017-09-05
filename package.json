@@ -34,9 +34,9 @@
   },
   "scripts": {
     "start": "node server/index.js",
+    "prestart": "webpack",
     "build": "webpack",
-    "dev": "webpack --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "webpack --watch"
   },
   "repository": {
     "type": "git",

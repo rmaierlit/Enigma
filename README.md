@@ -1,6 +1,13 @@
 # Enigma
 
-_how to install here_
+### Installing Enigma:
+If you wish, you can change the server secret by editing _server/helpers/secret.js_
+
+....npm install
+....npm start
+
+
+### How Enigma Works
 
 Enigma performs two layers of encryption to ensure users can have complete confidence in the security and privacy of their messages. First the message field itself is encrypted on the client side, using the passphrase in the hash route of the application. This encrypted message is then combined with the name field and the expiration field to create a JSON object (the "tablet") that is then send to the server for the second layer of encryption.
 
@@ -23,7 +30,7 @@ The server encrypts this entire JSON object using a secret passphrase (stored in
 }
 ```
 
-Because the message is encrypted both on the client and the server, neither the user nor the Enigma administrators will all the information necessary to decrypt the tablet. Both sides have to work together during decryption. This approach has several advantages:
+Because the message is encrypted both on the client and the server, neither the user nor the Enigma administrators will all the information necessary for decryption. Both sides will have to work together. This approach has several advantages:
 
 * Users do not need to "trust" Enigma to keep secret the contents of their messages, as the message field itself is already encrypted when sent to the server, and the server never sees the client-side passphrase.
 
