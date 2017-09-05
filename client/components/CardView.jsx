@@ -8,6 +8,7 @@ import Avatar from 'material-ui/Avatar';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import CryptoDialog from './CryptoDialog';
+import ServerDialog from './ServerDialog';
 
 
 // client side encryption (first-layer)
@@ -35,6 +36,8 @@ class CardView extends Component {
       nameError: null,
       messageError: null,
       expError: null,
+      serverMessage: null,
+      serverDialogOpen: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleUntrackedChange = this.handleUntrackedChange.bind(this);
@@ -44,6 +47,7 @@ class CardView extends Component {
     this.handleEncrypt = this.handleEncrypt.bind(this);
     this.handleDecrypt = this.handleDecrypt.bind(this);
     this.updateFields = this.updateFields.bind(this);
+    this.handleServerDialogClose = this.handleServerDialogClose.bind(this);
   }
 
   handleChange(event, value) {
@@ -68,6 +72,14 @@ class CardView extends Component {
     this.setState({ dialogOpen: false });
   }
 
+  displayServerMessage(message) {
+    this.setState({ serverDialogOpen: true, serverMessage: message });
+  }
+
+  handleServerDialogClose() {
+    this.setState({ serverDialogOpen: false });
+  }
+
   handleEncrypt() {
     const inputIsValid = this.validateInput();
     if (this.state.changedSinceLastEncrypt && inputIsValid) {
@@ -80,8 +92,10 @@ class CardView extends Component {
 
       axios.post('/api/encryptTablet', { tablet })
         // store the encrypted tablet in the state, reset the tracker for changes
-        .then(res => this.setState({ crypted: res.data, changedSinceLastEncrypt: false }, 
-          this.handleOpen)) // callback to open dialog after setState is finished updating
+        .then(res => this.setState({
+          crypted: res.data.encryptedTablet, changedSinceLastEncrypt: false },
+          this.handleOpen, // callback to open dialog after setState is finished updating
+        ))
         .catch(err => console.error(err));
     } else if (inputIsValid) {
       this.handleOpen();
@@ -98,19 +112,19 @@ class CardView extends Component {
 
   validName() {
     if (this.state.name === '') {
-      this.setState({nameError: 'name is required'});
+      this.setState({ nameError: 'name is required' });
       return false;
     }
-    this.setState({nameError: ''});
+    this.setState({ nameError: '' });
     return true;
   }
 
   validMessage() {
     if (this.state.message === '') {
-      this.setState({messageError: 'message is required'});
+      this.setState({ messageError: 'message is required' });
       return false;
     }
-    this.setState({messageError: ''});
+    this.setState({ messageError: '' });
     return true;
   }
 
@@ -119,13 +133,21 @@ class CardView extends Component {
       this.setState({ expError: 'expiration date is required' });
       return false;
     }
-    this.setState({expError: ''});
+    this.setState({ expError: '' });
     return true;
   }
 
   handleDecrypt() {
     axios.post('/api/decryptTablet', { encryptedTablet: this.state.dialogMessage })
-      .then(res => this.updateFields(res.data))
+      .then((res) => {
+        if (res.data.tablet) {
+          this.updateFields(res.data.tablet);
+        }
+
+        if (res.data.message) {
+          this.displayServerMessage(res.data.message);
+        }
+      })
       .catch(err => console.error(err));
     this.handleClose();
   }
@@ -158,6 +180,7 @@ class CardView extends Component {
           value={this.state.name}
           onChange={this.handleChange}
           errorText={this.state.nameError}
+          errorStyle={{ float: 'left' }}
         />
         <Input
           type="text"
@@ -191,6 +214,12 @@ class CardView extends Component {
           handleChange={this.handleUntrackedChange}
           handleClose={this.handleClose}
           handleDecrypt={this.handleDecrypt}
+        />
+
+        <ServerDialog
+          message={this.state.serverMessage}
+          open={this.state.serverDialogOpen}
+          handleClose={this.handleServerDialogClose}
         />
 
       </Card>
