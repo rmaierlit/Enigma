@@ -26,10 +26,11 @@ function CryptoDialog(props) {
     >
       <Input 
         type="text"
-        name="crypted"
+        name="dialogMessage"
         floatingLabelText="Message"
+        fullWidth
         multiLine
-        value={props.crypted}
+        value={props.dialogMessage}
         onChange={props.handleChange}
       />
     </Dialog>
